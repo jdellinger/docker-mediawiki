@@ -34,6 +34,11 @@ if ! [ -e index.php -a -e includes/DefaultSettings.php ]; then
 		( set -x; ls -A; sleep 10 )
 	fi
 	tar cf - --one-file-system -C /usr/src/mediawiki . | tar xf -
+  FILES="COPYING CREDITS FAQ HISTORY INSTALL README UPGRADE"
+  for f in $FILES
+  do
+     mv $f _$f
+  done
 	echo >&2 "Complete! MediaWiki has been successfully copied to $(pwd)"
 fi
 

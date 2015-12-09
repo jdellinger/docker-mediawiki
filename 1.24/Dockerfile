@@ -1,5 +1,5 @@
 FROM php:5.6-apache
-MAINTAINER Synctree App Force <appforce+docker@synctree.com>
+MAINTAINER Jay Dellinger <jay@dellingertechnologies.com>
 
 ENV MEDIAWIKI_VERSION 1.24
 ENV MEDIAWIKI_FULL_VERSION 1.24.2
@@ -10,6 +10,7 @@ RUN set -x; \
         g++ \
         libicu52 \
         libicu-dev \
+        git \
     && pecl install intl \
     && echo extension=intl.so >> /usr/local/etc/php/conf.d/ext-intl.ini \
     && apt-get purge -y --auto-remove g++ libicu-dev \
@@ -41,6 +42,9 @@ RUN MEDIAWIKI_DOWNLOAD_URL="https://releases.wikimedia.org/mediawiki/$MEDIAWIKI_
     && gpg --verify mediawiki.tar.gz.sig \
     && tar -xf mediawiki.tar.gz -C /usr/src/mediawiki --strip-components=1
 
+RUN cd /usr/src/mediawiki \
+    && curl -O http://getcomposer.org/composer.phar \
+    && php composer.phar require mediawiki/maps "*"
 
 COPY apache/mediawiki.conf /etc/apache2/
 RUN echo Include /etc/apache2/mediawiki.conf >> /etc/apache2/apache2.conf

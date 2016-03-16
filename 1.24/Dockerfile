@@ -25,6 +25,9 @@ RUN set -x; \
 
 RUN a2enmod rewrite
 
+RUN pear install mail \
+    && pear install net_smtp
+
 # https://www.mediawiki.org/keys/keys.txt
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys \
     441276E9CCD15F44F6D97D18C119E1A64D70938E \
